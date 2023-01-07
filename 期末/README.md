@@ -92,12 +92,12 @@ city_pos = [
     (2545, 2357), (2778, 2826), (2370, 2975)
 ]
 
-def distance(city1, city2):
+def distance(city1, city2): #計算兩個城市的距離
     x1, y1 = city1
     x2, y2 = city2
     return math.sqrt((x1-x2)*(x1-x2) + (y1-y2)*(y1-y2))
 
-def path_len(arr):
+def path_len(arr): #路徑長
     path = 0
     for i in range(N-1):
         index1 = arr[i]
@@ -105,31 +105,36 @@ def path_len(arr):
         path += distance(city_pos[index1-1], city_pos[index2-1])
     return path + distance(city_pos[arr[-1]-1], city_pos[arr[0]-1])
 
-def create_new():
+def create_new(): #產生新解
     pos1 = random.randint(0, N-1)
     pos2 = random.randint(0, N-1)
     city_list[pos1], city_list[pos2] = city_list[pos2], city_list[pos1]
 
-T = T0
-count = 0
+T = T0 #初始溫度
+count = 0 #紀錄降溫次數
 while T > T_end:
     for i in range(L):
         city_list_copy = city_list.copy()
         create_new()
-        f1 = path_len(city_list)
-        f2 = path_len(city_list_copy)
-        df = f1 - f2
+        f1 = path_len(city_list) #初始解函式值
+        f2 = path_len(city_list_copy) #新解值
+        df = f1 - f2 #差值
         if df > 0:
             city_list = city_list_copy
         elif math.exp(df/T) > random.uniform(0, 1):
             city_list = city_list_copy
-    T *= q
+    T *= q #降溫
     count += 1
-print(" -> ".join(str(city) for city in city_list))
-print(f"Path length: {path_len(city_list)}")
-print(f"Iteration count: {count}")
+print(" -> ".join(str(city) for city in city_list)) #城市順序
+print(f"Path length: {path_len(city_list)}") #最短路徑
+print(f"Iteration count: {count}") #降火次數
 ```
-
+得出結果
+```
+1 -> 15 -> 2 -> 4 -> 5 -> 6 -> 16 -> 8 -> 9 -> 10 -> 7 -> 13 -> 14 -> 12 -> 11 -> 23 -> 19 -> 17 -> 3 -> 18 -> 22 -> 21 -> 20 -> 24 -> 25 -> 26 -> 28 -> 27 -> 30 -> 31 -> 29
+Path length: 16715.593288905846
+Iteration count: 1448
+```
 參考資料:   
 [ChatGPT](https://openai.com/blog/chatgpt/)   
-[維基百科](https://zh.wikipedia.org/zh-tw/%E7%8B%AC%E7%AB%8B%E9%9B%86)
+維基百科
